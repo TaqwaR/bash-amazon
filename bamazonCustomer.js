@@ -3,7 +3,7 @@ const mysql = require("mysql");
 const inquirer = require("inquirer");
 const cTable = require("console.table");
 
-let userRequest;
+//let userRequest = [];
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -37,36 +37,46 @@ function accio() {
       console.log("🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮");
       console.log("             ");
     }
-      promptOne();
+      prompts();
   })
 
 };
 
 
-function promptOne() {
-    inquirer
-      .prompt({
-          name: "productID",
-          type: "input",
-          message: "What is the ID of the product that you would like to buy?"
-        })
-        .then(function(answer) {
+function prompts() {
+  inquirer.prompt({
+        name: "productID",
+        type: "input",
+        message: "What is the ID of the product that you would like to buy?"
+      }).then(function(answer) {
+        if (answer.productID) {
           let userRequest = parseInt(answer.productID);
           console.log("Customer Request: Product " + userRequest);
-          promptTwo()
+
+          inquirer.prompt({
+            name: "howMany",
+            type: "input",
+            message: "How many would you like to buy?"
+          }).then(function(answer) {
+              let userQuantity = parseInt(answer.howMany);
+              console.log("Desired quantity: " + userQuantity);
+
+              function checkStock() {
+                console.log();
+                connection.query(
+                  "SELECT * FROM inventory WHERE ?",
+                  {
+                    item_id: userRequest
+                  },
+                  function(error, response) {
+                  if (error) throw error;
+                  console.log("We have Product " + userRequest );
+                  }
+                );
+              }
+
+              checkStock()
+          })
+        }
       })
-};
-
-
-function promptTwo() {
-  inquirer
-  .prompt({
-    name: "howMany",
-    type: "input",
-    message: "How many would you like to buy?"
-  })
-  .then(function(answer) {
-    let userQuantity = parseInt(answer.howMany);
-    console.log("Desired quantity: " + userQuantity);
-  })
-};
+}
