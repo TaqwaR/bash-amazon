@@ -1,6 +1,9 @@
 const dotenv = require("dotenv").config();
 const mysql = require("mysql");
 const inquirer = require("inquirer");
+const cTable = require("console.table");
+
+let userRequest;
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -18,6 +21,7 @@ connection.connect(function(error) {
   accio();
   // prompt();
 });
+
 
 function accio() {
   console.log("Loading Magical Products 🔍 🔍 🔍 \n");
@@ -38,6 +42,7 @@ function accio() {
 
 };
 
+
 function promptOne() {
     inquirer
       .prompt({
@@ -46,10 +51,12 @@ function promptOne() {
           message: "What is the ID of the product that you would like to buy?"
         })
         .then(function(answer) {
-          console.log(answer);
+          let userRequest = parseInt(answer.productID);
+          console.log("Customer Request: Product " + userRequest);
           promptTwo()
       })
 };
+
 
 function promptTwo() {
   inquirer
@@ -59,6 +66,7 @@ function promptTwo() {
     message: "How many would you like to buy?"
   })
   .then(function(answer) {
-    console.log(answer);
+    let userQuantity = parseInt(answer.howMany);
+    console.log("Desired quantity: " + userQuantity);
   })
 };
