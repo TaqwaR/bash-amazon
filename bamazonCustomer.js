@@ -3,8 +3,6 @@ const mysql = require("mysql");
 const inquirer = require("inquirer");
 const cTable = require("console.table");
 
-//let userRequest = [];
-
 const connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
@@ -19,7 +17,6 @@ connection.connect(function(error) {
   if (error) throw error;
   console.log("Connected as ID " + connection.threadId + "\n");
   accio();
-  // prompt();
 });
 
 
@@ -62,21 +59,53 @@ function prompts() {
               console.log("Desired quantity: " + userQuantity);
 
               function checkStock() {
-                console.log();
                 connection.query(
                   "SELECT * FROM inventory WHERE ?",
                   {
                     item_id: userRequest
                   },
+
                   function(error, response) {
                   if (error) throw error;
-                  console.log("We have Product " + userRequest );
+                  console.log("We have Product " + userRequest);
+
+                  if (userQuantity > response[0].stock_quantity) {
+                    console.log("Insufficient quantity!", " We have " + response[0].stock_quantity + " in stock");
+                    //console.log(response[0].stock_quantity);
                   }
-                );
+
+                  else {
+                    console.log("Sufficient quantity!", " We have " + response[0].stock_quantity + " in stock");
+                    //console.log(response[0].stock_quantity);
+                    let responseInt = parseInt(response);
+                    //updateInventory(responseInt, userQuantity, userRequest);
+                  }
+
+                })
+
               }
 
               checkStock()
           })
         }
       })
+}
+
+function updateInventory(response, userQuantity, userRequest) {
+  console.log("updating inventory and calculating your total...");
+  connection.query(
+    "UPDATE inventory SET ? WHERE ?",
+    [
+      {
+        stock_quantity: response - userQuantity
+      },
+      {
+        item_id: userRequest
+      }
+    ],
+    function(error, res) {
+      if (error) throw error;
+      console.log(res.affectedRows + " inventory updated.");
+    }
+  )
 }
