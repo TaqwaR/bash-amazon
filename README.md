@@ -5,15 +5,17 @@
 
 # Screenshots
 
-A successful purchase. 🤞🏾
-
-![Bamazon1](/Users/taqwarushdan/Sites/bamazon/Bamazon1.gif)
 
 
+ A successful purchase. 🤞🏾
 
-An unnsuccessful purchase. 👎🏾
+![A successful purchase. 🤞🏾](Bamazon1.gif?raw=true "A successful purchase 🤞🏾")
 
-![Bamazon2](/Users/taqwarushdan/Sites/bamazon/Bamazon2.gif)
+
+
+An unsuccessful purchase. 👎🏾
+
+![An unsuccessful purchase. 👎🏾](Bamazon2.gif?raw=true "An unnsuccessful purchase. 👎🏾")
 
 
 
