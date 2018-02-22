@@ -5,7 +5,15 @@
 
 # Screenshots
 
+A successful purchase. 🤞🏾
 
+![Bamazon1](/Users/taqwarushdan/Sites/bamazon/Bamazon1.gif)
+
+
+
+An unnsuccessful purchase. 👎🏾
+
+![Bamazon2](/Users/taqwarushdan/Sites/bamazon/Bamazon2.gif)
 
 
 
@@ -31,19 +39,19 @@
 
 # Key Functions
 
-#### `accio()` 
+#### ❑`accio()` 
 
 Initial function that displays items available for custumers to purchase.
 
-#### `prompts()`
+#### ❑`prompts()`
 
 Prompts to gather information about items that the costumer wnats to purchase. This function requires the Inquirer npm package
 
-#### `checkStock()`
+#### ❑`checkStock()`
 
 Compares the customer's request against the available stock quantities, and let's the costumer know if their request exceeds what is available in stock. 
 
-#### `updateInventory()`
+#### ❑`updateInventory()`
 
 Once the the custumer decides on a sufficient quantity, this calculates the remaining stock quantity and updates the inventory database to reflect the recent changes.
 
