@@ -31,6 +31,7 @@ function accio() {
       console.log("⚡Product Name: " + response[i].product_name);
       console.log("⚡Department: " + response[i].department_name);
       console.log("⚡Price: $" + response[i].price);
+      console.log("⚡Available Amount " + response[i].stock_quantity);
       console.log("🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮");
       console.log("             ");
     }
@@ -71,14 +72,15 @@ function prompts() {
 
                   if (userQuantity > response[0].stock_quantity) {
                     console.log("Insufficient quantity!", " We have " + response[0].stock_quantity + " in stock");
-                    //console.log(response[0].stock_quantity);
                   }
 
                   else {
                     console.log("Sufficient quantity!", " We have " + response[0].stock_quantity + " in stock");
-                    //console.log(response[0].stock_quantity);
-                    let responseInt = parseInt(response);
-                    //updateInventory(responseInt, userQuantity, userRequest);
+                    let stockAvail = response[0].stock_quantity;
+                    let productPrice = response[0].price;
+                    let purchaseTotal = productPrice * userQuantity;
+                    updateInventory(stockAvail, userQuantity, userRequest);
+                    totalCost(productPrice, purchaseTotal, userQuantity);
                   }
 
                 })
@@ -93,6 +95,9 @@ function prompts() {
 
 function updateInventory(response, userQuantity, userRequest) {
   console.log("updating inventory and calculating your total...");
+  // console.log(response);
+  // console.log(userQuantity);
+  // console.log(userRequest);
   connection.query(
     "UPDATE inventory SET ? WHERE ?",
     [
@@ -108,4 +113,8 @@ function updateInventory(response, userQuantity, userRequest) {
       console.log(res.affectedRows + " inventory updated.");
     }
   )
+}
+
+function totalCost(purchaseTotal) {
+  console.log("Your total is: $" + purchaseTotal);
 }
