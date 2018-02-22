@@ -13,6 +13,8 @@ const connection = mysql.createConnection({
   database: "itsmagic_db"
 });
 
+
+
 connection.connect(function(error) {
   if (error) throw error;
   console.log("Connected as ID " + connection.threadId + "\n");
@@ -26,15 +28,39 @@ function accio() {
   connection.query("SELECT * FROM inventory", function(error, response) {
     if (error) throw error;
 
-    for (var i = 0; i < 11; i++) {
-      console.log("⚡Product ID: " + response[i].item_id)
-      console.log("⚡Product Name: " + response[i].product_name);
-      console.log("⚡Department: " + response[i].department_name);
-      console.log("⚡Price: $" + response[i].price);
-      console.log("⚡Available Amount " + response[i].stock_quantity);
-      console.log("🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮");
-      console.log("             ");
+    for (var i = 1; i < 11; i++) {
+
+      let tableValues = [
+        ["⚡Product ID", "⚡Product Name", "⚡Department", "⚡Price", "⚡Available Amount"],
+        [response[i].item_id, response[i].product_name, response[i].department_name, response[i].price, response[i].stock_quantity]
+      ];
+
+      console.table(tableValues[0], tableValues.slice(i));
+      //console.log(tableValues);
+
     }
+
+  //   for (var i = 0; i < 11; i++) {
+  //   console.table([
+  //     {
+  //       "⚡Product ID": response[i].item_id,
+  //       "⚡Product Name": response[i].product_name,
+  //       "⚡Department": response[i].department_name,
+  //       "⚡Price": response[i].price,
+  //       "⚡Available Amount": response[i].stock_quantity
+  //     }
+  //   ]);
+  // }
+
+    // for (var i = 0; i < 11; i++) {
+    //   console.log("⚡Product ID: " + response[i].item_id);
+    //   console.log("⚡Product Name: " + response[i].product_name);
+    //   console.log("⚡Department: " + response[i].department_name);
+    //   console.log("⚡Price: $" + response[i].price);
+    //   console.log("⚡Available Amount " + response[i].stock_quantity);
+    //   console.log("🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮");
+    //   console.log("             ");
+    // }
       prompts();
   })
 
@@ -72,6 +98,7 @@ function prompts() {
 
                   if (userQuantity > response[0].stock_quantity) {
                     console.log("Insufficient quantity!", " We have " + response[0].stock_quantity + " in stock");
+                    accio()
                   }
 
                   else {
@@ -95,9 +122,6 @@ function prompts() {
 
 function updateInventory(response, userQuantity, userRequest) {
   console.log("updating inventory and calculating your total...");
-  // console.log(response);
-  // console.log(userQuantity);
-  // console.log(userRequest);
   connection.query(
     "UPDATE inventory SET ? WHERE ?",
     [
@@ -114,6 +138,7 @@ function updateInventory(response, userQuantity, userRequest) {
     }
   )
 }
+
 
 function totalCost(purchaseTotal) {
   console.log("Your total is: $" + purchaseTotal);
