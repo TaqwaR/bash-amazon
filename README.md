@@ -1,5 +1,5 @@
 # Bamazon (Bash-Amazon)
- This application is an Amazon-like storefront with the MySQL. The CLI app will take in orders from customers and deplete stock from the store's MySQL-strored inventory.
+ This application is an Amazon-like storefront with MySQL. The CLI app will take in orders from customers and deplete stock from the store's MySQL-strored inventory.
 
 
 
