@@ -23,45 +23,13 @@ connection.connect(function(error) {
 
 
 function accio() {
-  console.log("Loading Magical Products 🔍 🔍 🔍 \n");
+  console.log("🔍 🔍 🔍 Loading Magical Products 🔍 🔍 🔍 \n");
 
-  connection.query("SELECT * FROM inventory", function(error, response) {
+  connection.query("SELECT item_id, product_name, department_name, price FROM inventory", function(error, response) {
     if (error) throw error;
 
-    for (var i = 1; i < 11; i++) {
-
-      let tableValues = [
-        ["⚡Product ID", "⚡Product Name", "⚡Department", "⚡Price", "⚡Available Amount"],
-        [response[i].item_id, response[i].product_name, response[i].department_name, response[i].price, response[i].stock_quantity]
-      ];
-
-      console.table(tableValues[0], tableValues.slice(i));
-      //console.log(tableValues);
-
-    }
-
-  //   for (var i = 0; i < 11; i++) {
-  //   console.table([
-  //     {
-  //       "⚡Product ID": response[i].item_id,
-  //       "⚡Product Name": response[i].product_name,
-  //       "⚡Department": response[i].department_name,
-  //       "⚡Price": response[i].price,
-  //       "⚡Available Amount": response[i].stock_quantity
-  //     }
-  //   ]);
-  // }
-
-    // for (var i = 0; i < 11; i++) {
-    //   console.log("⚡Product ID: " + response[i].item_id);
-    //   console.log("⚡Product Name: " + response[i].product_name);
-    //   console.log("⚡Department: " + response[i].department_name);
-    //   console.log("⚡Price: $" + response[i].price);
-    //   console.log("⚡Available Amount " + response[i].stock_quantity);
-    //   console.log("🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮 🔮");
-    //   console.log("             ");
-    // }
-      prompts();
+    console.table(response);
+    prompts();
   })
 
 };
@@ -76,6 +44,7 @@ function prompts() {
         if (answer.productID) {
           let userRequest = parseInt(answer.productID);
           console.log("Customer Request: Product " + userRequest);
+          console.log("                    ");
 
           inquirer.prompt({
             name: "howMany",
@@ -84,6 +53,7 @@ function prompts() {
           }).then(function(answer) {
               let userQuantity = parseInt(answer.howMany);
               console.log("Desired quantity: " + userQuantity);
+              console.log("                    ");
 
               function checkStock() {
                 connection.query(
@@ -94,20 +64,22 @@ function prompts() {
 
                   function(error, response) {
                   if (error) throw error;
-                  console.log("We have Product " + userRequest);
 
                   if (userQuantity > response[0].stock_quantity) {
-                    console.log("Insufficient quantity!", " We have " + response[0].stock_quantity + " in stock");
-                    accio()
+                    console.log("Whoops!", " We don't have enough " + response[0].product_name + "s in stock. :-( Try again.");
+                    console.log("                    ");
+                    prompts()
                   }
 
                   else {
-                    console.log("Sufficient quantity!", " We have " + response[0].stock_quantity + " in stock");
+                    console.log("Lucky you!", " We have " + response[0].product_name + "s in stock.");
+                    console.log("                    ");
                     let stockAvail = response[0].stock_quantity;
                     let productPrice = response[0].price;
                     let purchaseTotal = productPrice * userQuantity;
                     updateInventory(stockAvail, userQuantity, userRequest);
-                    totalCost(productPrice, purchaseTotal, userQuantity);
+                    totalCost(purchaseTotal, userQuantity);
+                    connection.end();
                   }
 
                 })
@@ -121,7 +93,8 @@ function prompts() {
 }
 
 function updateInventory(response, userQuantity, userRequest) {
-  console.log("updating inventory and calculating your total...");
+  console.log("🧠 🧠 🧠 Updating inventory and calculating your total 🧠 🧠 🧠");
+  console.log("                    ");
   connection.query(
     "UPDATE inventory SET ? WHERE ?",
     [
@@ -135,6 +108,7 @@ function updateInventory(response, userQuantity, userRequest) {
     function(error, res) {
       if (error) throw error;
       console.log(res.affectedRows + " inventory updated.");
+      console.log("                    ");
     }
   )
 }
